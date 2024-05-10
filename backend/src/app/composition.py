@@ -37,7 +37,7 @@ def compose_image(image_path, bbox, class_name, product_name, image_num):
     # Make save directory 
     image_name = Path(image_path).stem
     box_id = "{}_{}_{}_{}".format(*bbox)
-    save_path = f"composed_images/{image_name}/{product_name}/{box_id}"
+    save_path = f"tmp/composed_images/{image_name}/{product_name}/{box_id}"
     os.makedirs(save_path, exist_ok=True)
 
     x_left, y_bottom, x_right, y_top = bbox[0], bbox[1], bbox[2], bbox[3]
@@ -96,7 +96,7 @@ def compose_image(image_path, bbox, class_name, product_name, image_num):
             if ii == (image_num - 1):
                 returned_image = image
         
-        return returned_image
+        return returned_image, save_path + '/num_5.jpg'
 
     else:
     
@@ -111,4 +111,4 @@ def compose_image(image_path, bbox, class_name, product_name, image_num):
             if ii == (image_num - 1):
                 returned_image = image
         
-        return returned_image
+        return returned_image, save_path + '/num_5.jpg'

@@ -1,28 +1,37 @@
+from PIL import Image
+
+from similarity import find_product_similarity
+from generation import generate_image
 from segmentation import get_segmentation_boxes
 from composition import compose_image
 from recognition import filter_objects
 
-INPUT_IMAGE_PATH = "image-2.png"
+INPUT_IMAGE_PATH = "input_images/room5.jpg"
 
 if __name__ == "__main__":
     
-   # BEFORE: CALL CONTROLNET API TO ADD THE IMAGE
+   # Call ControlNet API to generate the image
+   image_path = generate_image(INPUT_IMAGE_PATH, "“Stylish living room embracing mid-century modern aesthetic”")
 
-   # NOW: EXTRACT THE BOUNDING BOXES FROM IMAGE
-   boxes = get_segmentation_boxes(INPUT_IMAGE_PATH)
-   # FILTER BOUNDING BOXES VIA OBJECT RECOGNITION
-   boxes = filter_objects(INPUT_IMAGE_PATH, boxes)
+   # Extract the bounding boxes from the image
+   boxes = get_segmentation_boxes(image_path, save_to_disk=True)
+   # Filter the bounding boxes via object recogntiion
+   boxes = filter_objects(image_path, boxes, threshold=0.2)
    print(boxes)
 
-   # TODO: ITERATE THROUGH BOUNDING BOXES, IN THIS EXAMPLE WE JUST USE ONE
-   box = boxes['sofa;couch;lounge'][0]
+   for item in boxes:
+      for box in item:
+         # Call similarity pipeline to return most similar product ID
+         full_image = Image.open(image_path)
+         crop_image = full_image.crop(box)
+         result = find_product_similarity(crop_image)
+         
+         class_name = result['metadata']['class_name']
+         product_id = result['metadata']['id']
 
-   # TODO: CALL SIMILARITY PIPELINE TO RETURN MOST SIMILAR PRODUCT ID
-
-   # COMPOSE IMAGE GIVEN PRODUCT ID (IN THIS EXAMPLE, WE USE COUCH5)
-   compose_image(INPUT_IMAGE_PATH,
-                 box,
-                "couch",
-                "couch5",
-                5)
-    # RESULTS WILL BE SAVED TO COMPOSED_IMAGES/ DIRECTORY
+         # Iteratively compose image with each product
+         _, image_path = compose_image(image_path,
+                                       box,
+                                       class_name,
+                                       product_id,
+                                       5)
