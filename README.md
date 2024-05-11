@@ -22,6 +22,7 @@ If you would like to run decorAIte on a test image, do the following:
 
 Upload an image to your workspace and specify the path in the `INPUT_IMAGE_PATH` constant in `test.py`. Then, run:
 > python3 test.py
+
 You will find the composed images under the generated `tmp/` directory.
 
 **Contributions**  
