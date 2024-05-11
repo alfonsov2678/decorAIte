@@ -30,3 +30,5 @@ Sameer: Built the fine-tuned Image Composition Models using DreamCom + contribut
 Nirvaan: Helped in setting up ControlNet + wrote evaluation script and conducted user study
 Alfonso: Built the RAG similarity pipeline + helped in setting up ControlNet  
 David: Built scripts for data collection and ingestion + conducted user study
+
+You can view the full paper here: https://drive.google.com/file/d/1-ujvDePS62hwioIbKCVBjMgQI5ewG5a4/view?usp=sharing
